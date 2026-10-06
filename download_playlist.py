@@ -1,7 +1,7 @@
 """YouTube 재생목록 다운로더.
 
 영상 방향에 따라 해상도를 다르게 선택한다.
-  - 세로 영상 (높이 > 너비): 1080p (짧은 변 기준 1080, 예: 1080x1920)
+  - 세로 영상 (높이 > 너비): 4K (짧은 변 기준 2160, 예: 2160x3840)
   - 가로 영상 (너비 >= 높이): 4K   (짧은 변 기준 2160, 예: 3840x2160)
 해당 해상도가 없으면 그 이하에서 가장 좋은 화질로 받는다.
 
@@ -17,8 +17,8 @@ import yt_dlp
 
 DEFAULT_OUTPUT_DIR = r"D:\youtube_video"
 
-# 세로 영상은 너비(짧은 변) 1080 이하, 가로 영상은 높이(짧은 변) 2160 이하
-VERTICAL_FORMAT = "bv*[width<=1080]+ba/b[width<=1080]/bv*+ba/b"
+# 세로 영상은 너비(짧은 변), 가로 영상은 높이(짧은 변) 기준 2160 이하 (4K)
+VERTICAL_FORMAT = "bv*[width<=2160]+ba/b[width<=2160]/bv*+ba/b"
 HORIZONTAL_FORMAT = "bv*[height<=2160]+ba/b[height<=2160]/bv*+ba/b"
 
 
@@ -78,7 +78,7 @@ def download_playlist(url, output_dir, archive_file):
 
         vertical = is_vertical(info)
         width, height = get_dimensions(info)
-        print(f"  원본 {width}x{height} -> {'세로, 1080p' if vertical else '가로, 4K'}로 다운로드")
+        print(f"  원본 {width}x{height} -> {'세로' if vertical else '가로'} 영상, 4K로 다운로드")
 
         opts = dict(base_opts)
         opts["format"] = VERTICAL_FORMAT if vertical else HORIZONTAL_FORMAT
